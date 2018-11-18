@@ -55,7 +55,7 @@ class NewFileInDir(ProbeInterface):
     def getval(self):
         if self.return_newest:
             if len(self.newest_files) > 0:
-                self.val = self.newest_files[-1]
+                self.val = self.newest_files[0]
         else:
             self.val = self.newest_files
 
