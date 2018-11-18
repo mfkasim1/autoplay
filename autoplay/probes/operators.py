@@ -19,6 +19,6 @@ class AndProbe(ProbeInterface):
         self.a.clear()
         self.b.clear()
 
-def OrProbe(AndProbe):
+class OrProbe(AndProbe):
     def check(self):
         return self.a.check() or self.b.check()
