@@ -91,6 +91,8 @@ class NewFileInDir(ProbeInterface):
     def _get_last_modified_file(self):
         mtimes = []
         files = []
+        mtimes_max = 0
+        files_max = None
         for f in os.listdir(self.fdir):
             # if not match the pattern, skip
             if not fnmatch.fnmatch(f, self.name_pattern): continue
@@ -101,8 +103,9 @@ class NewFileInDir(ProbeInterface):
 
             # collect the modified time and the files
             mtime = os.path.getmtime(fname)
-            mtimes.append(mtime)
-            files.append(f)
+            if mtime > mtimes_max:
+                mtimes_max = mtime
+                files_max = f
 
         # returns the last modified file
-        return files[np.argmax(mtimes)]
+        return files_max
