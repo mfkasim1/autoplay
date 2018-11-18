@@ -58,6 +58,10 @@ class NewFileInDir(ProbeInterface):
                 self.val = self.newest_files[-1]
         else:
             self.val = self.newest_files
+
+        # return the latest modified file
+        if self.val is None:
+            self.val = self._get_last_modified_file()
         return self.val
 
     def clear(self):
@@ -83,3 +87,22 @@ class NewFileInDir(ProbeInterface):
             mtime = os.path.getmtime(fname)
             res[fname] = (t, sz, mtime)
         return res
+
+    def _get_last_modified_file(self):
+        mtimes = []
+        files = []
+        for f in os.listdir(self.fdir):
+            # if not match the pattern, skip
+            if not fnmatch.fnmatch(f, self.name_pattern): continue
+
+            # if not a file, skip
+            fname = os.path.abspath(os.path.join(self.fdir, f))
+            if not os.path.isfile(fname): continue
+
+            # collect the modified time and the files
+            mtime = os.path.getmtime(fname)
+            mtimes.append(mtime)
+            files.append(f)
+
+        # returns the last modified file
+        return files[np.argmax(mtimes)]
