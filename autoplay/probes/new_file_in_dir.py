@@ -37,11 +37,11 @@ class NewFileInDir(ProbeInterface):
                 self.filesinfo[f] = new_filesinfo[f]
                 self.changing_files.append(f)
             else:
-                old_t, old_sz = self.filesinfo[f]
-                t, sz = new_filesinfo[f]
-                if sz != old_sz:
+                old_t, old_sz, old_mtime = self.filesinfo[f]
+                t, sz, mtime = new_filesinfo[f]
+                if sz != old_sz or old_mtime != mtime:
                     # the file is changing
-                    self.filesinfo[f] = (t, sz)
+                    self.filesinfo[f] = (t, sz, mtime)
                     if f not in self.changing_files:
                         self.changing_files.append(f)
 
@@ -78,6 +78,8 @@ class NewFileInDir(ProbeInterface):
             fname = os.path.abspath(os.path.join(self.fdir, f))
             if not os.path.isfile(fname): continue
 
-            # store the checking time and size
-            res[fname] = (t, os.path.getsize(fname))
+            # store the checking time, size, and modified time
+            sz = os.path.getsize(fname)
+            mtime = os.path.getmtime(fname)
+            res[fname] = (t, sz, mtime)
         return res
