@@ -28,6 +28,7 @@ class NewFileInDir(ProbeInterface):
 
         self.changing_files = []
         self.newest_files = []
+        self.val = None
 
     def check(self):
         new_filesinfo = self._get_file_sizes()
@@ -54,10 +55,10 @@ class NewFileInDir(ProbeInterface):
     def getval(self):
         if self.return_newest:
             if len(self.newest_files) > 0:
-                return self.newest_files[-1]
-            return None
+                self.val = self.newest_files[-1]
         else:
-            return self.newest_files
+            self.val = self.newest_files
+        return self.val
 
     def clear(self):
         self.newest_files = []
