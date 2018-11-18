@@ -65,7 +65,11 @@ class NewFileInDir(ProbeInterface):
         return self.val
 
     def clear(self):
-        self.newest_files = []
+        if self.return_newest:
+            if len(self.newest_files) > 0:
+                self.newest_files.remove(self.val)
+        else:
+            self.newest_files = []
 
     def _assert_dir(self, fdir):
         if not (os.path.exists(fdir) and os.path.isdir(fdir)):
