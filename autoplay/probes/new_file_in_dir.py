@@ -66,7 +66,7 @@ class NewFileInDir(ProbeInterface):
 
     def clear(self):
         if self.return_newest:
-            if len(self.newest_files) > 0:
+            if len(self.newest_files) > 0 and self.val in self.newest_files:
                 self.newest_files.remove(self.val)
         else:
             self.newest_files = []
